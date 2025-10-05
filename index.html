@@ -1,472 +1,392 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FitBalance - Your Weight Loss Journey</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            color: white;
-            margin-bottom: 40px;
-            animation: fadeIn 1s ease-in;
-        }
-
-        header h1 {
-            font-size: 3em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-
-        header p {
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-
-        .card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            animation: slideUp 0.8s ease-out;
-        }
-
-        .card h2 {
-            color: #667eea;
-            margin-bottom: 25px;
-            font-size: 1.8em;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            color: #555;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        input, select {
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 1em;
-            transition: all 0.3s;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: #667eea;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
-        }
-
-        .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px 40px;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn:active {
-            transform: translateY(-1px);
-        }
-
-        .results {
-            display: none;
-            animation: fadeIn 0.6s ease-in;
-        }
-
-        .results.show {
-            display: block;
-        }
-
-        .result-box {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-        }
-
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
-        }
-
-        .result-item:last-child {
-            border-bottom: none;
-        }
-
-        .result-label {
-            font-weight: 600;
-            color: #555;
-        }
-
-        .result-value {
-            font-weight: bold;
-            color: #667eea;
-            font-size: 1.1em;
-        }
-
-        .meal-plan {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .meal-card {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            border-left: 4px solid #667eea;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-        }
-
-        .meal-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        }
-
-        .meal-card h3 {
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-        }
-
-        .meal-card ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .meal-card li {
-            padding: 8px 0;
-            color: #666;
-            position: relative;
-            padding-left: 20px;
-        }
-
-        .meal-card li:before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: #10b981;
-            font-weight: bold;
-        }
-
-        .calories-badge {
-            display: inline-block;
-            background: #10b981;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            margin-top: 10px;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideUp {
-            from {
-                transform: translateY(30px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        @media (max-width: 600px) {
-            header h1 {
-                font-size: 2em;
-            }
-            
-            .card {
-                padding: 25px;
-            }
-            
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .tip-box {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-
-        .tip-box h4 {
-            color: #856404;
-            margin-bottom: 8px;
-        }
-
-        .tip-box p {
-            color: #856404;
-            line-height: 1.6;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FitBalance — Meal Variants</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:20px}
+  .container{max-width:980px;margin:0 auto}
+  header{text-align:center;color:#fff;margin-bottom:36px}
+  header h1{font-size:2.6rem;margin-bottom:6px;text-shadow:2px 2px 6px rgba(0,0,0,.25)}
+  .card{background:#fff;border-radius:20px;padding:32px;margin-bottom:22px;box-shadow:0 10px 28px rgba(0,0,0,.22)}
+  h2{color:#667eea;margin-bottom:18px}
+  .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:10px}
+  label{color:#444;margin-bottom:6px;font-weight:600;display:block}
+  input,select{padding:12px;border:2px solid #e5e7eb;border-radius:10px;font-size:1rem;transition:.2s background,border,transform}
+  input:focus,select:focus{outline:none;border-color:#667eea;transform:translateY(-2px);box-shadow:0 6px 16px rgba(102,126,234,.25)}
+  .btn{display:inline-block;width:100%;margin-top:10px;border:none;border-radius:12px;padding:14px 18px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;font-weight:700;cursor:pointer;transition:.2s transform,box-shadow}
+  .btn:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(102,126,234,.45)}
+  .results{display:none}
+  .results.show{display:block;animation:fadeInUp .45s ease-out}
+  .result-box{background:linear-gradient(135deg,#f5f7fa 0%,#c3cfe2 100%);padding:18px 20px;border-radius:14px;margin-bottom:16px}
+  .result-item{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #e5e7eb}
+  .result-item:last-child{border-bottom:none}
+  .result-label{color:#555;font-weight:600}
+  .result-value{color:#667eea;font-weight:800}
+  .meal-plan{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:10px}
+  .meal-card{background:#fff;border:1px solid #edf2f7;border-radius:16px;padding:18px;border-left:5px solid #667eea;box-shadow:0 4px 12px rgba(0,0,0,.08);cursor:pointer;transition:.2s transform,box-shadow}
+  .meal-card:hover{transform:translateY(-4px);box-shadow:0 10px 22px rgba(0,0,0,.12)}
+  .meal-card h3{color:#667eea;margin-bottom:10px;font-size:1.15rem;display:flex;align-items:center;gap:8px}
+  .meal-card ul{list-style:none}
+  .meal-card li{position:relative;padding-left:18px;color:#5b5b5b;padding:6px 0}
+  .meal-card li::before{content:"✓";position:absolute;left:0;top:0;color:#10b981;font-weight:900}
+  .calories-badge{display:inline-block;margin-top:8px;background:#10b981;color:#fff;border-radius:999px;padding:4px 10px;font-size:.9rem}
+  .hint{color:#6b7280;margin:8px 0 4px}
+  .error{display:none;margin-top:8px;background:#fde8e8;color:#b91c1c;border:1px solid #fecaca;border-radius:10px;padding:10px 12px}
+  .error.show{display:block}
+  /* Modal */
+  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;padding:16px}
+  .modal-backdrop.show{display:flex}
+  .modal{background:#fff;border-radius:16px;max-width:680px;width:100%;box-shadow:0 18px 38px rgba(0,0,0,.28);animation:pop .18s ease-out}
+  .modal header{color:#1f2937;text-align:left;padding:18px 22px;border-bottom:1px solid #eef2f7}
+  .modal header h3{font-size:1.2rem}
+  .modal .content{padding:14px 20px 20px}
+  .variant{border:1px solid #e5e7eb;border-radius:12px;padding:14px 14px;margin-bottom:12px;display:flex;gap:12px;align-items:flex-start}
+  .variant .tag{font-weight:700;color:#374151;background:#e5e7eb;border-radius:8px;padding:2px 8px}
+  .variant ul{list-style:none;margin-top:6px}
+  .variant li{padding:4px 0;color:#4b5563}
+  .variant .meta{display:flex;gap:8px;align-items:center;margin-top:6px}
+  .variant .cal{background:#10b981;color:#fff;border-radius:999px;padding:3px 8px;font-size:.85rem}
+  .modal .actions{display:flex;justify-content:flex-end;gap:8px;padding:0 20px 16px}
+  .btn-sm{padding:10px 14px;border:none;border-radius:10px;background:#667eea;color:#fff;font-weight:700;cursor:pointer}
+  .btn-outline{background:#fff;color:#374151;border:1px solid #e5e7eb}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes pop{from{transform:scale(.97);opacity:.7}to{transform:scale(1);opacity:1}}
+  @media (max-width:600px){header h1{font-size:2rem}.card{padding:22px}}
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🎯 FitBalance</h1>
-            <p>Your personalized weight loss journey starts here</p>
-        </header>
+<div class="container">
+  <header>
+    <h1>🎯 FitBalance</h1>
+    <p>Your personalized weight loss journey starts here</p>
+  </header>
 
-        <div class="card">
-            <h2>📊 Calculate Your Daily Calories</h2>
-            <form id="calcForm">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="age">Age</label>
-                        <input type="number" id="age" required min="15" max="100" placeholder="e.g., 30">
-                    </div>
-                    <div class="form-group">
-                        <label for="gender">Gender</label>
-                        <select id="gender" required>
-                            <option value="">Select...</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="height">Height (cm)</label>
-                        <input type="number" id="height" required min="100" max="250" placeholder="e.g., 170">
-                    </div>
-                    <div class="form-group">
-                        <label for="weight">Current Weight (kg)</label>
-                        <input type="number" id="weight" required min="30" max="300" step="0.1" placeholder="e.g., 75">
-                    </div>
-                    <div class="form-group">
-                        <label for="target">Target Weight (kg)</label>
-                        <input type="number" id="target" required min="30" max="300" step="0.1" placeholder="e.g., 65">
-                    </div>
-                    <div class="form-group">
-                        <label for="activity">Activity Level</label>
-                        <select id="activity" required>
-                            <option value="">Select...</option>
-                            <option value="1.2">Sedentary (little or no exercise)</option>
-                            <option value="1.375">Lightly active (1-3 days/week)</option>
-                            <option value="1.55">Moderately active (3-5 days/week)</option>
-                            <option value="1.725">Very active (6-7 days/week)</option>
-                            <option value="1.9">Super active (athlete)</option>
-                        </select>
-                    </div>
-                </div>
-                <button type="submit" class="btn">Calculate My Plan</button>
-            </form>
+  <div class="card">
+    <h2>📊 Calculate Your Daily Calories</h2>
+    <div id="err" class="error"></div>
+    <form id="form" novalidate>
+      <div class="form-grid">
+        <div><label for="age">Age</label><input id="age" type="number" min="15" max="100" placeholder="e.g., 30" required></div>
+        <div><label for="gender">Gender</label>
+          <select id="gender" required>
+            <option value="">Select...</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select></div>
+        <div><label for="height">Height (cm)</label><input id="height" type="number" min="100" max="250" placeholder="e.g., 170" required></div>
+        <div><label for="weight">Current Weight (kg)</label><input id="weight" type="number" min="30" max="300" step="0.1" placeholder="e.g., 75" required></div>
+        <div><label for="target">Target Weight (kg)</label><input id="target" type="number" min="30" max="300" step="0.1" placeholder="e.g., 65" required></div>
+        <div><label for="activity">Activity Level</label>
+          <select id="activity" required>
+            <option value="">Select...</option>
+            <option value="1.2">Sedentary (little or no exercise)</option>
+            <option value="1.375">Lightly active (1–3 days/week)</option>
+            <option value="1.55">Moderately active (3–5 days/week)</option>
+            <option value="1.725">Very active (6–7 days/week)</option>
+            <option value="1.9">Super active (athlete)</option>
+          </select>
         </div>
+      </div>
+      <button class="btn" type="submit">Calculate / Update Plan</button>
+      <p class="hint">После расчёта кликай по любому блоку (Breakfast/Lunch/Dinner/Snacks), чтобы выбрать один из 3 вариантов с похожей калорийностью.</p>
+    </form>
+  </div>
 
-        <div id="resultsSection" class="results">
-            <div class="card">
-                <h2>🎉 Your Personalized Plan</h2>
-                <div class="result-box">
-                    <div class="result-item">
-                        <span class="result-label">Basal Metabolic Rate (BMR)</span>
-                        <span class="result-value" id="bmr">-</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Daily Calorie Needs (TDEE)</span>
-                        <span class="result-value" id="tdee">-</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Calories for Weight Loss</span>
-                        <span class="result-value" id="deficit">-</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Weight to Lose</span>
-                        <span class="result-value" id="tolose">-</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Estimated Time to Goal</span>
-                        <span class="result-value" id="timeline">-</span>
-                    </div>
-                </div>
-
-                <div class="tip-box">
-                    <h4>💡 Pro Tip</h4>
-                    <p>A healthy weight loss rate is 0.5-1 kg per week. This ensures you lose fat, not muscle, and helps maintain your results long-term!</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>🍽️ Sample Meal Plan</h2>
-                <p style="color: #666; margin-bottom: 20px;">Here's what a day of eating could look like based on your calorie target:</p>
-                <div class="meal-plan" id="mealPlan"></div>
-            </div>
-        </div>
+  <div id="results" class="results">
+    <div class="card">
+      <h2>🎉 Your Personalized Plan</h2>
+      <div class="result-box">
+        <div class="result-item"><span class="result-label">BMR</span><span id="bmr" class="result-value">-</span></div>
+        <div class="result-item"><span class="result-label">TDEE</span><span id="tdee" class="result-value">-</span></div>
+        <div class="result-item"><span class="result-label">Calories for Weight Loss</span><span id="cals" class="result-value">-</span></div>
+        <div class="result-item"><span class="result-label">Weight to Lose</span><span id="tolose" class="result-value">-</span></div>
+        <div class="result-item"><span class="result-label">Estimated Time</span><span id="time" class="result-value">-</span></div>
+      </div>
     </div>
 
-    <script>
-        const mealPlans = {
-            1200: {
-                breakfast: ['2 eggs', 'Whole wheat toast', 'Small avocado', 'Black coffee'],
-                lunch: ['Grilled chicken breast (150g)', 'Mixed green salad', 'Olive oil dressing', 'Apple'],
-                dinner: ['Baked salmon (150g)', 'Steamed broccoli', 'Quinoa (100g)', 'Lemon'],
-                snacks: ['Greek yogurt', 'Handful of almonds']
-            },
-            1500: {
-                breakfast: ['3 eggs scrambled', 'Whole wheat toast', 'Half avocado', 'Orange juice'],
-                lunch: ['Grilled chicken breast (180g)', 'Mixed vegetables', 'Brown rice (150g)', 'Banana'],
-                dinner: ['Lean beef steak (180g)', 'Sweet potato', 'Green beans', 'Side salad'],
-                snacks: ['Protein shake', 'Apple with peanut butter']
-            },
-            1800: {
-                breakfast: ['Oatmeal with berries', '3 eggs', 'Whole wheat toast', 'Almond butter', 'Coffee'],
-                lunch: ['Turkey sandwich', 'Sweet potato', 'Greek salad', 'Orange'],
-                dinner: ['Grilled salmon (200g)', 'Quinoa (150g)', 'Roasted vegetables', 'Side salad'],
-                snacks: ['Protein bar', 'Mixed nuts', 'Greek yogurt']
-            },
-            2000: {
-                breakfast: ['4 eggs', 'Oatmeal with banana', 'Whole wheat toast', 'Peanut butter', 'Orange juice'],
-                lunch: ['Chicken breast (200g)', 'Brown rice (200g)', 'Mixed vegetables', 'Fruit salad'],
-                dinner: ['Lean beef (200g)', 'Sweet potato', 'Broccoli', 'Quinoa', 'Large salad'],
-                snacks: ['Protein shake', 'Trail mix', 'Cottage cheese']
-            }
-        };
+    <div class="card">
+      <h2>🍽️ Sample Meal Plan</h2>
+      <div id="meals" class="meal-plan"></div>
+    </div>
+  </div>
+</div>
 
-        document.getElementById('calcForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const age = parseInt(document.getElementById('age').value);
-            const gender = document.getElementById('gender').value;
-            const height = parseInt(document.getElementById('height').value);
-            const weight = parseFloat(document.getElementById('weight').value);
-            const target = parseFloat(document.getElementById('target').value);
-            const activity = parseFloat(document.getElementById('activity').value);
+<!-- Modal -->
+<div id="backdrop" class="modal-backdrop" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <header><h3 id="modalTitle">Choose a variant</h3></header>
+    <div class="content" id="modalContent"></div>
+    <div class="actions">
+      <button class="btn-sm btn-outline" id="closeModal">Close</button>
+    </div>
+  </div>
+</div>
 
-            // Validate all inputs
-            if (!age || !gender || !height || !weight || !target || !activity) {
-                alert('Please fill in all fields');
-                return;
-            }
+<script>
+// ---------- Data ----------
+// Base meal variants per calorie plan and meal type.
+// Each variant has: items[], approx calories (cal), and a short tag.
+const variants = {
+  1200: {
+    breakfast: [
+      { tag:'Option A', cal: 360, items:['2 eggs','Whole wheat toast','Small avocado','Black coffee'] },
+      { tag:'Option B', cal: 350, items:['Oatmeal (40g) with berries','Low-fat yogurt','Green tea'] },
+      { tag:'Option C', cal: 370, items:['Greek yogurt (150g)','Granola (30g)','Banana','Espresso'] }
+    ],
+    lunch: [
+      { tag:'Option A', cal: 420, items:['Grilled chicken (150g)','Mixed salad','Olive oil (1 tsp)','Apple'] },
+      { tag:'Option B', cal: 410, items:['Tuna salad','Whole grain crackers (4 pcs)','Pear'] },
+      { tag:'Option C', cal: 430, items:['Turkey wrap','Veggie sticks','Hummus (2 tbsp)'] }
+    ],
+    dinner: [
+      { tag:'Option A', cal: 360, items:['Baked salmon (150g)','Steamed broccoli','Quinoa (80–100g cooked)','Lemon'] },
+      { tag:'Option B', cal: 350, items:['Stir-fry tofu (120g)','Mixed veggies','Brown rice (100g cooked)'] },
+      { tag:'Option C', cal: 370, items:['Lean beef (120g)','Cauliflower mash','Green beans'] }
+    ],
+    snacks: [
+      { tag:'Option A', cal: 60, items:['Handful of almonds (10–12)'] },
+      { tag:'Option B', cal: 70, items:['Apple','Peanut butter (1 tsp)'] },
+      { tag:'Option C', cal: 65, items:['Cottage cheese (80g)'] }
+    ]
+  },
+  1500: {
+    breakfast: [
+      { tag:'Option A', cal: 450, items:['3 eggs scrambled','Whole wheat toast','Half avocado','Orange juice (150ml)'] },
+      { tag:'Option B', cal: 460, items:['Oatmeal (50g) + banana','Almonds (15g)','Coffee'] },
+      { tag:'Option C', cal: 440, items:['Protein smoothie','Peanut butter toast','Strawberries'] }
+    ],
+    lunch: [
+      { tag:'Option A', cal: 525, items:['Chicken breast (180g)','Mixed vegetables','Brown rice (150g cooked)','Banana'] },
+      { tag:'Option B', cal: 510, items:['Turkey sandwich','Side salad','Olive oil (1 tsp)'] },
+      { tag:'Option C', cal: 530, items:['Beef chili (200g)','Baked potato (150g)','Greek yogurt (plain)'] }
+    ],
+    dinner: [
+      { tag:'Option A', cal: 450, items:['Lean beef steak (180g)','Sweet potato','Green beans','Side salad'] },
+      { tag:'Option B', cal: 460, items:['Grilled salmon (170g)','Quinoa (120g cooked)','Roasted vegetables'] },
+      { tag:'Option C', cal: 440, items:['Chicken stir-fry','Buckwheat (120g cooked)','Cucumber salad'] }
+    ],
+    snacks: [
+      { tag:'Option A', cal: 75, items:['Protein shake (small)'] },
+      { tag:'Option B', cal: 80, items:['Apple','Peanut butter (1 tsp)'] },
+      { tag:'Option C', cal: 70, items:['Dark chocolate (2–3 squares)'] }
+    ]
+  },
+  1800: {
+    breakfast: [
+      { tag:'Option A', cal: 540, items:['Oatmeal with berries','3 eggs','Whole wheat toast','Almond butter','Coffee'] },
+      { tag:'Option B', cal: 530, items:['Greek yogurt bowl','Granola (40g)','Honey (1 tsp)','Banana'] },
+      { tag:'Option C', cal: 550, items:['Avocado toast x2','Boiled eggs (2)','Orange'] }
+    ],
+    lunch: [
+      { tag:'Option A', cal: 630, items:['Turkey sandwich (big)','Sweet potato','Greek salad','Orange'] },
+      { tag:'Option B', cal: 620, items:['Chicken burrito bowl','Brown rice (160g)','Pico + beans'] },
+      { tag:'Option C', cal: 640, items:['Pasta + tuna (160g cooked)','Olive oil (1 tbsp)','Side salad'] }
+    ],
+    dinner: [
+      { tag:'Option A', cal: 540, items:['Grilled salmon (200g)','Quinoa (150g cooked)','Roasted vegetables','Side salad'] },
+      { tag:'Option B', cal: 550, items:['Beef steak (200g)','Baked potato','Broccoli'] },
+      { tag:'Option C', cal: 530, items:['Chicken curry (200g)','Basmati rice (150g cooked)','Cucumber salad'] }
+    ],
+    snacks: [
+      { tag:'Option A', cal: 90, items:['Protein bar (small)'] },
+      { tag:'Option B', cal: 85, items:['Mixed nuts (20g)'] },
+      { tag:'Option C', cal: 95, items:['Greek yogurt (150g) + honey (1 tsp)'] }
+    ]
+  },
+  2000: {
+    breakfast: [
+      { tag:'Option A', cal: 600, items:['4 eggs','Oatmeal + banana','Whole wheat toast','Peanut butter','OJ (200ml)'] },
+      { tag:'Option B', cal: 590, items:['Pancakes (2) + maple (1 tbsp)','Scrambled eggs (2)','Blueberries'] },
+      { tag:'Option C', cal: 610, items:['Breakfast burrito','Salsa','Orange'] }
+    ],
+    lunch: [
+      { tag:'Option A', cal: 700, items:['Chicken breast (200g)','Brown rice (200g cooked)','Mixed vegetables','Fruit salad'] },
+      { tag:'Option B', cal: 690, items:['Beef bowl','Quinoa (170g cooked)','Roasted peppers','Avocado (1/2)'] },
+      { tag:'Option C', cal: 710, items:['Whole grain pasta (180g cooked)','Turkey meatballs','Tomato sauce','Parmesan (small)'] }
+    ],
+    dinner: [
+      { tag:'Option A', cal: 600, items:['Lean beef (200g)','Sweet potato','Broccoli','Quinoa','Large salad'] },
+      { tag:'Option B', cal: 590, items:['Grilled salmon (220g)','Brown rice (180g cooked)','Asparagus','Olive oil (1 tbsp)'] },
+      { tag:'Option C', cal: 610, items:['Chicken fajitas','Tortillas (2)','Guacamole (2 tbsp)','Veggies'] }
+    ],
+    snacks: [
+      { tag:'Option A', cal: 100, items:['Protein shake','Walnuts (small)'] },
+      { tag:'Option B', cal: 95, items:['Trail mix (25g)'] },
+      { tag:'Option C', cal: 105, items:['Cottage cheese (150g)'] }
+    ]
+  }
+};
 
-            if (target >= weight) {
-                alert('Target weight must be less than current weight');
-                return;
-            }
+// Split of calories across meals
+const split = { breakfast:0.30, lunch:0.35, dinner:0.30, snacks:0.05 };
 
-            let bmr;
-            if (gender === 'male') {
-                bmr = 10 * weight + 6.25 * height - 5 * age + 5;
-            } else {
-                bmr = 10 * weight + 6.25 * height - 5 * age - 161;
-            }
+// ---------- Helpers ----------
+const $ = (id) => document.getElementById(id);
+const round = (n) => Math.round(n);
 
-            const tdee = bmr * activity;
-            const deficit = tdee - 500;
-            const weightToLose = weight - target;
-            const weeksToGoal = Math.ceil((weightToLose / 0.5));
-            const monthsToGoal = Math.ceil(weeksToGoal / 4);
+function nearestPlanCalories(target){
+  const choices = [1200,1500,1800,2000];
+  return choices.reduce((best,c)=>Math.abs(c-target)<Math.abs(best-target)?c:best, choices[0]);
+}
 
-            document.getElementById('bmr').textContent = Math.round(bmr) + ' kcal/day';
-            document.getElementById('tdee').textContent = Math.round(tdee) + ' kcal/day';
-            document.getElementById('deficit').textContent = Math.round(deficit) + ' kcal/day';
-            document.getElementById('tolose').textContent = weightToLose.toFixed(1) + ' kg';
-            
-            if (monthsToGoal < 2) {
-                document.getElementById('timeline').textContent = weeksToGoal + ' weeks';
-            } else {
-                document.getElementById('timeline').textContent = monthsToGoal + ' months';
-            }
+function weeksOrMonths(weeks){
+  const m = Math.ceil(weeks/4);
+  return m < 2 ? `${weeks} weeks` : `${m} months`;
+}
 
-            let planCalories;
-            if (deficit < 1350) planCalories = 1200;
-            else if (deficit < 1650) planCalories = 1500;
-            else if (deficit < 1900) planCalories = 1800;
-            else planCalories = 2000;
+function showError(msgs){
+  const e = $('err');
+  e.innerHTML = (Array.isArray(msgs)?msgs:[msgs]).map(m=>'• '+m).join('<br>');
+  e.classList.add('show');
+}
+function clearError(){ $('err').classList.remove('show'); $('err').innerHTML=''; }
 
-            const plan = mealPlans[planCalories];
-            const mealPlanDiv = document.getElementById('mealPlan');
-            
-            mealPlanDiv.innerHTML = `
-                <div class="meal-card">
-                    <h3>🌅 Breakfast</h3>
-                    <ul>
-                        ${plan.breakfast.map(item => `<li>${item}</li>`).join('')}
-                    </ul>
-                    <span class="calories-badge">~${Math.round(planCalories * 0.3)} kcal</span>
-                </div>
-                <div class="meal-card">
-                    <h3>☀️ Lunch</h3>
-                    <ul>
-                        ${plan.lunch.map(item => `<li>${item}</li>`).join('')}
-                    </ul>
-                    <span class="calories-badge">~${Math.round(planCalories * 0.35)} kcal</span>
-                </div>
-                <div class="meal-card">
-                    <h3>🌙 Dinner</h3>
-                    <ul>
-                        ${plan.dinner.map(item => `<li>${item}</li>`).join('')}
-                    </ul>
-                    <span class="calories-badge">~${Math.round(planCalories * 0.3)} kcal</span>
-                </div>
-                <div class="meal-card">
-                    <h3>🍎 Snacks</h3>
-                    <ul>
-                        ${plan.snacks.map(item => `<li>${item}</li>`).join('')}
-                    </ul>
-                    <span class="calories-badge">~${Math.round(planCalories * 0.05)} kcal</span>
-                </div>
-            `;
+// ---------- Core Calc ----------
+function calcAndRender(){
+  clearError();
+  const age = parseInt($('age').value);
+  const gender = $('gender').value;
+  const height = parseInt($('height').value);
+  const weight = parseFloat($('weight').value);
+  const target = parseFloat($('target').value);
+  const activity = parseFloat($('activity').value);
 
-            document.getElementById('resultsSection').classList.add('show');
-            document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
-        });
-    </script>
+  const errs = [];
+  if(!age || age<15 || age>100) errs.push('Enter age 15–100');
+  if(!gender) errs.push('Select gender');
+  if(!height || height<100 || height>250) errs.push('Height must be 100–250 cm');
+  if(!weight || weight<30 || weight>300) errs.push('Weight must be 30–300 kg');
+  if(!target || target<30 || target>300) errs.push('Target must be 30–300 kg');
+  if(!activity) errs.push('Select activity');
+  if(!isNaN(weight) && !isNaN(target) && target >= weight) errs.push('Target must be less than current weight');
+  if(errs.length){ showError(errs); return; }
+
+  const bmr = gender==='male'
+    ? 10*weight + 6.25*height - 5*age + 5
+    : 10*weight + 6.25*height - 5*age - 161;
+
+  const tdee = bmr * activity;
+  const chosenDeficit = Math.min(500, tdee*0.20);
+  const targetCalories = Math.max(1200, Math.round(tdee - chosenDeficit)); // keep >=1200
+  const weightToLose = weight - target;
+  const weeks = Math.ceil(weightToLose / 0.5);
+
+  $('bmr').textContent = `${round(bmr)} kcal/day`;
+  $('tdee').textContent = `${round(tdee)} kcal/day`;
+  $('cals').textContent = `${targetCalories} kcal/day`;
+  $('tolose').textContent = `${weightToLose.toFixed(1)} kg`;
+  $('time').textContent = weeksOrMonths(weeks);
+
+  const plan = nearestPlanCalories(targetCalories);
+  renderMeals(plan, targetCalories);
+
+  $('results').classList.add('show');
+  $('results').scrollIntoView({behavior:'smooth'});
+}
+
+// ---------- Meals Render & Interaction ----------
+function renderMeals(planCalories, targetCalories){
+  const container = $('meals');
+  container.innerHTML = '';
+
+  // Preselect first option for each meal type based on split
+  const mealTypes = ['breakfast','lunch','dinner','snacks'];
+  mealTypes.forEach(type => {
+    const goal = Math.round(targetCalories * split[type]);
+    const opts = variants[planCalories][type];
+
+    // choose the variant with calories closest to goal
+    const startIndex = opts.reduce((bestIdx, v, i) =>
+      Math.abs(v.cal - goal) < Math.abs(opts[bestIdx].cal - goal) ? i : bestIdx, 0);
+    const v = opts[startIndex];
+
+    const card = document.createElement('div');
+    card.className = 'meal-card';
+    card.dataset.type = type;
+    card.dataset.plan = planCalories;
+
+    card.innerHTML = `
+      <h3>${typeIcon(type)} ${capitalize(type)}</h3>
+      <ul>${v.items.map(x=>`<li>${x}</li>`).join('')}</ul>
+      <span class="calories-badge" data-cal>~${v.cal} kcal</span>
+    `;
+
+    card.addEventListener('click', () => openModal(type, planCalories, goal, card));
+    container.appendChild(card);
+  });
+}
+
+function typeIcon(type){
+  return {
+    breakfast:'🌅', lunch:'☀️', dinner:'🌙', snacks:'🍎'
+  }[type] || '🍽️';
+}
+
+function capitalize(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+
+// ---------- Modal ----------
+const backdrop = $('backdrop');
+const modalContent = $('modalContent');
+const modalTitle = $('modalTitle');
+$('closeModal').addEventListener('click', () => backdrop.classList.remove('show'));
+backdrop.addEventListener('click', (e)=>{ if(e.target===backdrop) backdrop.classList.remove('show'); });
+
+function openModal(type, planCalories, goal, targetCard){
+  modalTitle.textContent = `${capitalize(type)} — choose one`;
+  const list = variants[planCalories][type];
+  modalContent.innerHTML = '';
+
+  list.forEach((opt, idx) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'variant';
+    wrap.innerHTML = `
+      <div class="tag">${opt.tag}</div>
+      <div style="flex:1">
+        <ul>${opt.items.map(x=>`<li>${x}</li>`).join('')}</ul>
+        <div class="meta">
+          <span class="cal">~${opt.cal} kcal</span>
+          <span style="color:#6b7280">(${diffText(opt.cal, goal)})</span>
+        </div>
+      </div>
+      <div>
+        <button class="btn-sm">Select</button>
+      </div>
+    `;
+    wrap.querySelector('.btn-sm').addEventListener('click', ()=>{
+      // Replace items in target card
+      targetCard.querySelector('ul').innerHTML = opt.items.map(x=>`<li>${x}</li>`).join('');
+      targetCard.querySelector('[data-cal]').textContent = `~${opt.cal} kcal`;
+      backdrop.classList.remove('show');
+    });
+    modalContent.appendChild(wrap);
+  });
+
+  backdrop.classList.add('show');
+}
+
+function diffText(cal, goal){
+  const d = cal - goal;
+  if (Math.abs(d) <= 40) return '≈ target';
+  return d>0 ? `+${d} vs target` : `${d} vs target`;
+}
+
+// ---------- Events ----------
+document.getElementById('form').addEventListener('submit', (e)=>{
+  e.preventDefault();
+  calcAndRender();
+});
+
+// live updates if results already shown
+['age','gender','height','weight','target','activity'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', debounce(()=>{
+    if(document.querySelector('.results.show')) calcAndRender();
+  }, 450));
+});
+
+function debounce(fn, ms){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), ms); }; }
+</script>
 </body>
 </html>
